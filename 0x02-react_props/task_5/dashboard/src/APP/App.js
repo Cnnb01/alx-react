@@ -1,42 +1,46 @@
-import logo from './holberton-logo.jpg';
-import './App.css';
-import { getFooterCopy, getFullYear } from './utilis';
-import Notifications from './Notifications';
+import React from "react";
+import Notifications from "../Notifications/Notifications";
+import Header from "../Header/Header";
+import Login from "../Login/Login";
+import Footer from "../Footer/Footer";
+import CourseList from "../CourseList/CourseList";
+import PropTypes from "prop-types";
+import "./App.css";
+import { getLatestNotification } from "../utils/utils";
 
-function App() {
+const listCourses = [
+  { id: 1, name: "ES6", credit: 60 },
+  { id: 2, name: "Webpack", credit: 20 },
+  { id: 3, name: "React", credit: 40 },
+];
+
+const listNotifications = [
+  { id: 1, type: "default", value: "New course available" },
+  { id: 2, type: "urgent", value: "New resume available" },
+  { id: 3, type: "urgent", html: getLatestNotification() },
+];
+
+function App(isLoggedIn) {
   return (
-    <div className="App">
-       <Notifications />
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>School dashboard</h1>
-      </header>
-      <body className="App-body">
-        <p>Login to access the full dashboard</p>
-
-        <form>
-
-          {/* Email */}
-          <div>
-            <label htmlFor="email">Email: </label>
-              <input type="email" id="email" />            
-          </div>
-
-          {/* Password Input */}
-          <div>
-            <label htmlFor="password">Password: </label>
-            <input type="password" id="password" />
-          </div>
-
-          {/* OK Button */}
-          <button>OK</button>
-        </form>
-      </body>
-      <footer className="App-footer">
-        <p>{`${getFooterCopy(true)} - ${getFullYear()}`}</p>
-      </footer>
-    </div>
+    <React.Fragment>
+      <div className="App">
+        <div className="heading-section">
+          <Notifications listNotifications={listNotifications} />
+          <Header />
+        </div>
+        {isLoggedIn ? <CourseList listCourses={listCourses} /> : <Login />}
+        <Footer />
+      </div>
+    </React.Fragment>
   );
 }
+
+App.defaultProps = {
+  isLoggedIn: false,
+};
+
+App.propTypes = {
+  isLoggedIn: PropTypes.bool,
+};
 
 export default App;
